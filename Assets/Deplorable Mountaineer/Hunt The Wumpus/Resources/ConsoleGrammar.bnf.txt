@@ -1,0 +1,38 @@
+/*
+ * Grammar for making commands out of tokens.
+ * This is parsed in the console's input.
+ * This file is not used in the code, but is
+ * for documentation purposes.  It was used
+ * by the code author to hand-write the WumpusParser.cs
+ * source.
+ */
+
+// Start symbol: every command is one of these
+Command : Action | LookCommand | Direction | <INVENTORY> | <SCORE> | <QUIT>;
+
+// The actor object, as an argument to a command
+Actor : <PLAYER> | <WUMPUS>;
+
+// The direction object, as an argument to a command
+Direction : <NORTH> | <SOUTH> | <EAST> | <WEST>;
+
+// Item objects, as an argument to a command
+Item : <BOW> | <ARROW> | <GOLD>;
+
+// An action is a command that affects state.
+Action : Face | Walk | <KILL_WUMPUS> | Grab | <CLIMB> | <UP>;
+
+// Change direction player is facing
+Face : <FACE> Direction;
+
+// Move one square in a given direction
+Walk : <WALK> Direction;
+
+// If the gold is here, pick it up
+Grab : <GRAB> <GOLD>;
+
+// Give a description of an object, or look around the cave.
+LookCommand : <LOOK> Object | <LOOK_AROUND>;
+
+// An object that can be an argument to a command
+Object : Item | <PIT> | Actor | <ROOM>;

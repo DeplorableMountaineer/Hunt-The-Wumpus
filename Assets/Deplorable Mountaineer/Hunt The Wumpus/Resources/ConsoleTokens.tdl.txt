@@ -1,0 +1,55 @@
+﻿SKIP : (WHITESPACE | END_OF_LINE_COMMENT | BLOCK_COMMENT | /[?.!]/)*;
+KEYWORDS : /^no keywords/;
+
+IDENTIFIER : /^[A-Za-z_][A-Za-z0-9_]*\b/ & !KEYWORDS;
+POSITIVE_INTEGER : /^\d+/;
+REAL : /^[-]?\d*[.]\d+([eE][-+]?\d+)?|[-]?\d+[.]?([eE][-+]?\d+)?/;
+STRING_LITERAL : /^"([^\n\\"]|[\\].)*"/;
+REGULAR_EXPRESSION : /^[@]"([^\n\\"]|[\\].)*"/;
+WHITESPACE : /^\s+/;
+END_OF_LINE_COMMENT : c@^//.*[\n]@;
+BLOCK_COMMENT : c@^/[*]([^*]*([*][^/])?)*[*]/@;
+
+WORD : /^\w+\b/;
+
+PLAYER : /^(the\s+|this\s+)?(cool\s+|brave\s+|awesome\s+)*(player|user|hero|protagonist|(main\s+)?character)(\s+(in|of)\s+(the|this)\s+game)?/ | /^self|^yourself|^me|^myself/[I];
+WUMPUS : /^(the\s+|this\s+|that\s+)?(evil\s+|smelly\s+|stinky\s+|fat\s+|green\s+|ugly\s+|toothy\s+|scary\s+|man[-\s]*eating\s+)*(wumpus|monster|ogre|creature|enemy|beast)/[i];
+ROOM : /^(the\s+|this\s+)?(dank\s+|dark\s+|cold\s+|musty\s+|damp\s+|creepy\s+)*(room|cavern|cell|cave)(\s+[1-5][1-5])?(\s+of(\s+the|\s+this)?(\s+game|\s+(dank\s+|dark\s+|cold\s+|musty\s+|damp\s+|creepy\s+)*cave|\s+grid))?/[i];
+NORTH : /^n(orth(ward)?)?\b|^to(wards?)?\s+(the\s+)?n(orth)\b/[i];
+SOUTH : /^s(outh(ward)?)?\b|^to(wards?)?\s+(the\s+)?s(outh)\b/[i];
+EAST : /^e(ast(ward)?)?\b|^to(wards?)?\s+(the\s+)?e(ast)\b/[i];
+WEST : /^w(est(ward)?)?\b|^to(wards?)?\s+(the\s+)?w(est)\b/[i];
+NORTHWEST : /^nw|^northwest(ward)?|^to(wards?)?\s+(the\s+)?northwest/[i];
+NORTHEAST : /^ne|^northeast(ward)?|^to(wards?)?\s+(the\s+)?northeast/[i];
+SOUTHWEST : /^sw|^southwest(ward)?|^to(wards?)?\s+(the\s+)?southwest/[i];
+SOUTHEAST : /^se|^southeast(ward)?|^to(wards?)?\s+(the\s+)?southeast/[i];
+UP : /^u(p(ward)?)?|^exit/[i];
+DOWN : /^d(own(ward)?)?\b/[i];
+BOW : /^(the\s+|this\s+|that\s+|my\s+|your\s+)?(deadly\s+|trusty\s+|wooden\s+)*bow(\s+and\s+arrow)?/[i];
+ARROW : /^(the\s+|this\s+|that\s+|my\s+|your\s+|an\s+)?(deadly\s+|trusty\s+|wooden\s+|straight\s+)*arrow/[i];
+GOLD : /^(the\s+|this\s+|that\s+)?(((large\s+|big\s+|wooden\s+|massive\s+|great\s+)*chest(\s+of\s+(bright\s+|shiny\s+|glittering\s+|valuable\s+)*gold)?)|(the\s+|this\s+|that\s+)?(bright\s+|shiny\s+|glittering\s+|valuable\s+)*gold)/[i];
+PIT : /^(the\s+|this\s+|that\s+)?(deep\s+|breezy\s+|treacherous\s+)*(bottomless\s+)?(pit|hole|abyss)/[i];
+FACE : LOOK_DIRECTION | /^face|^turn/[i];
+LOOK_DIRECTION : /^l(ook)?/ [DISCARD] WHITESPACE (NORTH | SOUTH | EAST | WEST) [i];
+WALK : /^walk\b|^go\b|^move\b/[i];
+KILL : /^shoot|^shoot|kill|^attack|^fire/[i];
+FIRE : /^shoot|^deploy|^release|^fire/[i];
+AT : /^at/[i];
+KILL_WUMPUS : KILL (WHITESPACE AT)? WHITESPACE WUMPUS
+    | FIRE WHITESPACE (BOW | ARROW) (WHITESPACE AT WHITESPACE WUMPUS)?
+    | FIRE WHITESPACE ARROW WHITESPACE WITH WHITESPACE BOW (WHITESPACE AT WHITESPACE WUMPUS)?
+    | FIRE WHITESPACE ARROW WHITESPACE AT WHITESPACE WUMPUS WHITESPACE WITH WHITESPACE BOW
+    | USE WHITESPACE BOW (WHITESPACE TO WHITESPACE FIRE WHITESPACE ARROW (WHITESPACE AT WHITESPACE WUMPUS)?)? (WHITESPACE TO WHITESPACE KILL WHITESPACE WUMPUS)?
+    | USE WHITESPACE ARROW (WHITESPACE TO WHITESPACE KILL WHITESPACE WUMPUS)?
+    | FIRE WHITESPACE (BOW | ARROW) (WHITESPACE TO WHITESPACE KILL WHITESPACE WUMPUS)
+    | KILL WHITESPACE WUMPUS WHITESPACE WITH WHITESPACE ( BOW | ARROW );
+USE : /^use/[i];
+TO : /^to|^in\s+order\s+to/[i];
+WITH : /^with|^using/[i];
+GRAB : /^grab|^take|^get|^pick\s+up/[i];
+CLIMB : /^climb\b/ (WHITESPACE UP)? | /^go\s+up/[i];
+LOOK_AROUND : /^l(ook)?\b(\s+around|\s+about)?/[i];
+LOOK : /^l(ook)?\b(\s+at)?|^describe\b/[i];
+INVENTORY : /^(show\s+)?(the\s+|my\s+|your\s+)?(i(nv(entory)?)?)\b/[i];
+SCORE : /^((show|what|what\s+is|what's)\s+(the\s+|my\s+|your\s+)?)?(score|status)\b/[i];
+QUIT : /^quit(\s+(the\s+|this\s+)?game)?/ | /^exit\s+(the\s+|this\s+)?game\b/[i];

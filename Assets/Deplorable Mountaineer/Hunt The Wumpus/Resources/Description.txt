@@ -1,0 +1,93 @@
+﻿//used for website blurbs, etc.  Not used by the code.
+
+Hunt the Wumpus
+
+A text-based adventure based on the game of the same name written by Gregory Yob in 1974.  See http://web.archive.org/web/20100428041109/http://www.atariarchives.org/bcc1/showpage.php?page=247 for the original game, written in BASIC.
+
+Hunt the Wumpus was originally played on the vertices of a dodecahedron.  Thus the cave system had 20
+caverns, and each cavern was adjacent to three other caverns.
+
+The Game
+
+This version is more similar to what is described in Artificial Intelligence: A Modern Approach, 4th US ed. (http://aima.cs.berkeley.edu/) by Stuart Russell and Peter Norvig.  The game is played
+on a 5x5 grid, and thus there are 25 caverns, each one adjacent to four other caverns.  The grid
+wraps around like a torus, similar to the classic arcade game Asteroids.  Thus, if you move 5 rooms in any direction, you return to your starting point.
+
+In the game, you can move East, West, North, or South.  If you are in the starting room, you can also climb up to exit the cave, ending the game.  The game can be played multiple times and the score
+is based on the average score of games.  If you exit the game without the the gold, you get zero points.
+If you exit with the gold, you get 1000 points (with the total points divided by the number of games played).  If you get killed somewhere in the caves, you lose 1000 points.
+
+Each time the game is played, a chest of gold is in a random grid square, but not at the starting point.  A Wumpus (the evil smelly
+deadly man-eating monster) is in a random square, but not the same as the gold or the starting point.
+Two additional squares (not the ones with the wumpus or gold or starting point) have bottomless
+pits in them.
+
+You have a bow with one arrow.  You can face East, West, North, or South, and shoot the arrow.  It will
+fly up to two squares in the direction you face.  If it hits the wumpus, it screams audibly and dies.
+If not, you have lost the arrow forever and the wumpus lives.  Note that if you walk in any direction,
+you will be facing that direction when you stop walking.
+
+If you are in the room with the gold, it will glitter so brightly you can see it in the dark cave.
+You can then pick up the chest of gold and make for the exit to get your 1000 points.
+
+If you enter the room with a live wumpus, it will eat you and, of course, you will die, ending the game.
+If the wumpus is dead, you will not die, but it will stink in the room.
+
+If you enter either room with a pit, you will fall into the pit (since you cannot see it) and
+die of boredom on the way down.
+
+You cannot see much, but you do get some warning.  When you are in a square adjacent to a wumpus,
+you smell his stench (whether it is alive or dead).  You then know it is in one of the four
+adjacent squares, but not which one (though of course, you can eliminate the square you entered from).
+
+If you are in a square adjacent to a pit, you will feel a cool, damp breeze from air being sucked into
+what is essentially a vacuum.
+
+Strategy
+
+To play the game effectively, you should draw a map.  Just draw a big square, draw two lines to divide it vertically and horizontally, then draw Eight more lines: two each dividing the vertical halves into thirds, and two each dividing the horizontal halves into thirds.  You now have a 5x5 grid.
+
+The start (top left is a good choice) can be marked with an X to indicate it is the exit.
+
+As you explore, write B in any square in which you feel a breeze, and S in any square in which you smell a stench.  Write E in a square with neither.  It is sometimes possible to deduce the location
+or direction of the wumpus or pits, or at least deduce that various squares in certain directions are
+safe.  So, to the extent possible, explore safe squares, and if you know which way the wumpus is
+and know you are within two squares of it, shoot it.  If you can do this, you will eventually find
+the gold and take a safe path back to the start.
+
+It doesn't always work so nicely!  Sometimes there are not safe unexplored spaces left.  Then you must make a decision:  is one direction more likely to be safe than another? Is the probability of it being
+deadly low enough you can risk going that way? If not, you might simply backtrack and exit the cave without the gold, scoring zero points, but also losing nothing.
+
+Now you see why the game was a subject in an artificial intelligence textbook: a useful AI exercise is
+to devise the optional strategy for maximizing the score over several games.
+
+The User Interface
+
+This is a text-based game.  The parser is a bit more sophisticated than simple two-word command parsers that understand "take gold" or "look wumpus".
+You can type more complex commands just to test if the interpreter can figure it out.  Some commands
+to try:
+
+Walk towards the east
+Face northward
+Pick up the wooden chest of shiny gold
+Describe the smelly wumpus
+Climb up
+Quit this game
+Show inventory
+I
+Fire your arrow at that wumpus
+Show the score
+Turn west
+Shoot the bow
+Take the gold
+Look around
+Look at the gold
+Attack the wumpus
+Describe the dank cavern of the cave
+Go up
+South
+S
+L bow
+
+(note that capitalization does not matter).
+

@@ -1,0 +1,28 @@
+[OUTPUT] Welcome to Hunt the Wumpus!  Escape with the gold without dying! You can move with commands like "go west" or "go towards the east".  You can also "face south" then "move" to go south.  Facing is important if you want to shoot a wumpus.  You can "shoot the bow and arrow at the wumpus", but you only have one arrow.  You must be facing the wumpus to kill it this way.  Live wumpuses are deadly, as are pits.  You know there is a wumpus in an adjacent area (just one move away) if you smell his stench.  You know there is a bottomless pit in an adjacent area if you feel the breeze.  If you find the gold, then  "pick up the wooden chest of shiny gold".  Return to your original location to climb out of the cave system and score a point.  Then, play again and again! "quit the game" will quit.  Try other commands or variations of commands to see what works.  The parser is extensive.
+
+What now?
+[OUTPUT] You are in a system of caves.  If you didn't miscount, you are 0 caverns east of the exit and 0 caverns north of the exit.  You are facing east.
+[OUTPUT] You smell a strong stench.
+[INPUT]  [0] look around
+[OUTPUT] You are in a system of caves.  If you didn't miscount, you are 0 caverns east of the exit and 0 caverns north of the exit.  You are facing east.
+[OUTPUT] You smell a strong stench.
+[INPUT]  [1] e
+[OUTPUT] You are in a system of caves.  If you didn't miscount, you are 1 caverns east of the exit and 0 caverns north of the exit.  You are facing east.
+[INPUT]  [2] w
+[OUTPUT] You are in a system of caves.  If you didn't miscount, you are 0 caverns east of the exit and 0 caverns north of the exit.  You are facing west.
+[OUTPUT] You smell a strong stench.
+[INPUT]  [3] s
+[OUTPUT] You are in a system of caves.  If you didn't miscount, you are 0 caverns east of the exit and 1 caverns south of the exit.  You are facing south.
+[INPUT]  [4] n
+[OUTPUT] You are in a system of caves.  If you didn't miscount, you are 0 caverns east of the exit and 0 caverns north of the exit.  You are facing north.
+[OUTPUT] You smell a strong stench.
+[INPUT]  [5] w
+[OUTPUT] You are in a system of caves.  If you didn't miscount, you are 1 caverns west of the exit and 0 caverns north of the exit.  You are facing west.
+[OUTPUT] There is a live, mean, smelly wumpus in the room with you!
+[OUTPUT] You see your life flashing before your eyes.  There is a long dark tunnel with a light at the end.
+[OUTPUT] Your current score is -1000 from 1 games.
+[OUTPUT] Welcome to Hunt the Wumpus!  Escape with the gold without dying! What now?
+[OUTPUT] You are in a system of caves.  If you didn't miscount, you are 0 caverns east of the exit and 0 caverns north of the exit.  You are facing east.
+[INPUT]  [6] get the gold
+[OUTPUT] No treasures here....
+[INPUT]  [7] quit

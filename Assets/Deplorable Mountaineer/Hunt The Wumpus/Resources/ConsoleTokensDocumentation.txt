@@ -1,0 +1,114 @@
+﻿/*
+ * This file contains named symbols followed by generalized regular expressions (allowing &, |, !
+ * operators on regexs or already-defined named symbols, as well as *, +, and ? suffixes)/.
+ * This is used by the parser to interpret commands typed into the console.
+ * See ConsoleGrammar.bnf.text for how tokens can be put together to make complete commands.
+ * This file is not parsed, as the token def parser can't handle comments.  Instead
+ * the uncommented version ConsoleTokens.tdl.txt is parsed.
+ */
+
+// This represents what is automatically skipped before getting the next token.
+// For Wumpus, we are interested in skipping whitespace and end-of-sentence punctuation.
+SKIP : (WHITESPACE | END_OF_LINE_COMMENT | BLOCK_COMMENT | /[?.!]/)*;
+KEYWORDS : /^no keywords/;
+
+IDENTIFIER : /^[A-Za-z_][A-Za-z0-9_]*\b/ & !KEYWORDS;
+POSITIVE_INTEGER : /^\d+/;
+REAL : /^[-]?\d*[.]\d+([eE][-+]?\d+)?|[-]?\d+[.]?([eE][-+]?\d+)?/;
+STRING_LITERAL : /^"([^\n\\"]|[\\].)*"/;
+REGULAR_EXPRESSION : /^[@]"([^\n\\"]|[\\].)*"/;
+WHITESPACE : /^\s+/;
+END_OF_LINE_COMMENT : c@^//.*[\n]@;
+BLOCK_COMMENT : c@^/[*]([^*]*([*][^/])?)*[*]/@;
+
+// Get the next word to be parsed, whatever it may be.  Used when composing error messages.
+// More specific tokens get matched below for valid commands
+WORD : /^\w+\b/;
+
+// The object representing the player, as in "describe the cool hero of this game".
+// the [i] at the end makes it case-insensitive.
+PLAYER : /^(the\s+|this\s+)?(cool\s+|brave\s+|awesome\s+)*(player|user|hero|protagonist|(main\s+)?character)(\s+(in|of)\s+(the|this)\s+game)?/ | /^self|^yourself|^me|^myself/[I];
+
+// The object representing the wumpus
+WUMPUS : /^(the\s+|this\s+|that\s+)?(evil\s+|smelly\s+|stinky\s+|fat\s+|green\s+|ugly\s+|toothy\s+|scary\s+|man[-\s]*eating\s+)*(wumpus|monster|ogre|creature|enemy|beast)/[i];
+
+// The object representing a room of the cave.  So, "describe cavern" is the same as "look around".
+ROOM : /^(the\s+|this\s+)?(dank\s+|dark\s+|cold\s+|musty\s+|damp\s+|creepy\s+)*(room|cavern|cell|cave)(\s+[1-5][1-5])?(\s+of(\s+the|\s+this)?(\s+game|\s+(dank\s+|dark\s+|cold\s+|musty\s+|damp\s+|creepy\s+)*cave|\s+grid))?/[i];
+
+// Directions.  Only the four cardinal are used in this game.
+NORTH : /^n(orth(ward)?)?\b|^to(wards?)?\s+(the\s+)?n(orth)\b/[i];
+SOUTH : /^s(outh(ward)?)?\b|^to(wards?)?\s+(the\s+)?s(outh)\b/[i];
+EAST : /^e(ast(ward)?)?\b|^to(wards?)?\s+(the\s+)?e(ast)\b/[i];
+WEST : /^w(est(ward)?)?\b|^to(wards?)?\s+(the\s+)?w(est)\b/[i];
+NORTHWEST : /^nw|^northwest(ward)?|^to(wards?)?\s+(the\s+)?northwest/[i];
+NORTHEAST : /^ne|^northeast(ward)?|^to(wards?)?\s+(the\s+)?northeast/[i];
+SOUTHWEST : /^sw|^southwest(ward)?|^to(wards?)?\s+(the\s+)?southwest/[i];
+SOUTHEAST : /^se|^southeast(ward)?|^to(wards?)?\s+(the\s+)?southeast/[i];
+
+// command to climb out of the cave.
+UP : /^u(p(ward)?)?|^exit/[i];
+
+//unused
+DOWN : /^d(own(ward)?)?\b/[i];
+
+// Various objects/areas that can be referenced in commands
+BOW : /^(the\s+|this\s+|that\s+|my\s+|your\s+)?(deadly\s+|trusty\s+|wooden\s+)*bow(\s+and\s+arrow)?/[i];
+ARROW : /^(the\s+|this\s+|that\s+|my\s+|your\s+|an\s+)?(deadly\s+|trusty\s+|wooden\s+|straight\s+)*arrow/[i];
+GOLD : /^(the\s+|this\s+|that\s+)?(((large\s+|big\s+|wooden\s+|massive\s+|great\s+)*chest(\s+of\s+(bright\s+|shiny\s+|glittering\s+|valuable\s+)*gold)?)|(the\s+|this\s+|that\s+)?(bright\s+|shiny\s+|glittering\s+|valuable\s+)*gold)/[i];
+PIT : /^(the\s+|this\s+|that\s+)?(deep\s+|breezy\s+|treacherous\s+)*(bottomless\s+)?(pit|hole|abyss)/[i];
+
+// Command to turn to face a direction (before shooting)
+FACE : LOOK_DIRECTION | /^face|^turn/[i];
+LOOK_DIRECTION : /^l(ook)?/ [DISCARD] WHITESPACE (NORTH | SOUTH | EAST | WEST) [i];
+
+// Command to move in a direction
+WALK : /^walk\b|^go\b|^move\b/[i];
+
+// Kill token, part of the command KILL_WUMPUS
+KILL : /^shoot|^shoot|kill|^attack|^fire/[i];
+
+// Shoot token, for shooting a weapon rather than shooting a wumpus
+FIRE : /^shoot|^deploy|^release|^fire/[i];
+
+// The word "at"
+AT : /^at/[i];
+
+// Command to kill the wumpus.  Note it can take a lot of forms.
+KILL_WUMPUS : KILL (WHITESPACE AT)? WHITESPACE WUMPUS
+    | FIRE WHITESPACE (BOW | ARROW) (WHITESPACE AT WHITESPACE WUMPUS)?
+    | FIRE WHITESPACE ARROW WHITESPACE WITH WHITESPACE BOW (WHITESPACE AT WHITESPACE WUMPUS)?
+    | FIRE WHITESPACE ARROW WHITESPACE AT WHITESPACE WUMPUS WHITESPACE WITH WHITESPACE BOW
+    | USE WHITESPACE BOW (WHITESPACE TO WHITESPACE FIRE WHITESPACE ARROW (WHITESPACE AT WHITESPACE WUMPUS)?)? (WHITESPACE TO WHITESPACE KILL WHITESPACE WUMPUS)?
+    | USE WHITESPACE ARROW (WHITESPACE TO WHITESPACE KILL WHITESPACE WUMPUS)?
+    | FIRE WHITESPACE (BOW | ARROW) (WHITESPACE TO WHITESPACE KILL WHITESPACE WUMPUS)
+    | KILL WHITESPACE WUMPUS WHITESPACE WITH WHITESPACE ( BOW | ARROW );
+
+// The word "use"
+USE : /^use/[i];
+
+// The word "to" or (for this game) synonymn
+TO : /^to|^in\s+order\s+to/[i];
+
+// The word "with" (or the synonym, in this game, "using")
+WITH : /^with|^using/[i];
+
+// The grab command
+GRAB : /^grab|^take|^get|^pick\s+up/[i];
+
+//Other forms of the Up command
+CLIMB : /^climb\b/ (WHITESPACE UP)? | /^go\s+up/[i];
+
+// The look around command (same as "describe room")
+LOOK_AROUND : /^l(ook)?\b(\s+around|\s+about)?/[i];
+
+// The describe command
+LOOK : /^l(ook)?\b(\s+at)?|^describe\b/[i];
+
+// show inventory command
+INVENTORY : /^(show\s+)?(the\s+|my\s+|your\s+)?(i(nv(entory)?)?)\b/[i];
+
+// show score/status commaned
+SCORE : /^((show|what|what\s+is|what's)\s+(the\s+|my\s+|your\s+)?)?(score|status)\b/[i];
+
+// quit command (for stand-alone; not useful on WegGL)
+QUIT : /^quit(\s+(the\s+|this\s+)?game)?/ | /^exit\s+(the\s+|this\s+)?game\b/[i];
