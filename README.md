@@ -33,7 +33,7 @@ you smell his stench (whether it is alive or dead).&nbsp; You then know it is in
 adjacent squares, but not which one (though of course, you can eliminate the square you entered from).&nbsp; If you are in a square adjacent to a pit, you will feel a cool, damp breeze from air being sucked into
 what is essentially a vacuum. <br></p>
 <h2>Strategy </h2>
-<p>To play the game effectively, you should draw a map. &nbsp; Just draw a big square, draw two lines to divide it vertically and horizontally, then draw Eight more lines: two each dividing the vertical halves into thirds, and two each dividing the horizontal halves into thirds.&nbsp; You now have a 5x5 grid.&nbsp; The start (top left is a good choice) can be marked with an X to indicate it is the exit.
+<p>To play the game effectively, you should draw a map. &nbsp; Just draw a big square, draw two lines to divide it vertically and horizontally, then draw  six more lines: two  each dividing one vertical half  and one horizontal half into thirds, and one each dividing the other vertical and horizontal halves.&nbsp; You now have a 5x5 grid.&nbsp; The start (top left is a good choice) can be marked with an X to indicate it is the exit.
 As you explore, write B in any square in which you feel a breeze, and S in any square in which you smell a stench.  Write E in a square with neither.  It is sometimes possible to deduce the location
 or direction of the wumpus or pits, or at least deduce that various squares in certain directions are
 safe. <br></p>
